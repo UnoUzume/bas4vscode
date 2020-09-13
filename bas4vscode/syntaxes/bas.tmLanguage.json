@@ -1,0 +1,153 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "bilibili animation script",
+    "patterns": [
+        {
+            "name": "storage.type.function.bas",
+            "match": "\\b(def|let|set)\\b"
+        },
+        {
+            "name": "entity.name.type.class.text.bas",
+            "match": "\\btext\\b"
+        },
+        {
+            "name": "entity.name.type.class.button.bas",
+            "match": "\\bbutton\\b"
+        },
+        {
+            "name": "entity.name.type.class.path.bas",
+            "match": "\\bpath\\b"
+        },
+        {
+            "name": "entity.name.object.def.bas",
+            "match": "(?<=(text|button|path)\\s+)[A-Za-z_][A-Za-z0-9_]*"
+        },
+        {
+            "name": "meta.block.def.text.bas",
+            "begin": "(?<=def\\s*text.*)(\\{)",
+			"end": "\\}",
+			"beginCaptures": {
+				"1": { "name": "punctuation.section.block.begin" }
+			  },
+			  "endCaptures": {
+				"0": { "name": "punctuation.section.block.end" }
+			  },
+            "patterns": [
+				{ "include": "#strings" },
+				{
+					"name": "keyword.operator.assignment.def.bas",
+					"match": "="
+				},
+                { "include": "#attributes.common" },
+                { "include": "#attributes.text.font" },
+                { "include": "#attributes.text.other" },
+                { "include": "#number.time" },
+                { "include": "#number.percentage" },
+                { "include": "#number.hexadecimal" },
+                { "include": "#number.float" },
+                { "include": "#number.decimal" }
+            ]
+        },
+        {
+            "name": "meta.block.let.bas",
+            "begin": "(?<=let.+)\\{",
+            "end": "\\}",
+            "patterns": [{ "include": "#strings" }]
+        },
+        {
+            "name": "meta.block.set.bas",
+            "begin": "(?<=set.+)\\{",
+            "end": "\\}",
+            "patterns": [{ "include": "#strings" }]
+        },
+        {
+            "include": "#keywords"
+        },
+        {
+            "include": "#strings"
+        },
+        {
+            "include": "#numbers"
+        },
+        {
+            "include": "#blocks"
+        }
+    ],
+    "repository": {
+        "keywords": {
+            "patterns": [
+                {
+                    "name": "keyword.control.bas",
+                    "match": "\\b(if|while|for|return)\\b"
+                }
+            ]
+        },
+        "strings": {
+            "name": "string.quoted.double.bas",
+            "begin": "\"",
+            "end": "\"",
+            "patterns": [
+                {
+                    "name": "constant.character.escape.bas",
+                    "match": "\\\\."
+                }
+            ]
+        },
+        "blocks": {
+            "name": "meta.block.bas",
+            "begin": "\\{",
+            "end": "\\}",
+            "patterns": [
+                {
+                    "include": "#strings"
+                }
+            ]
+        },
+        "number.decimal": {
+            "name": "constant.numeric.integer.decimal.bas",
+            "match": "\\d+"
+        },
+        "number.hexadecimal": {
+            "name": "constant.numeric.integer.hexadecimal.bas",
+            "match": "(0)(x)([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})",
+            "captures": {
+                "1": { "name": "punctuation.color.prefix.zero.bas" },
+                "2": { "name": "punctuation.color.prefix.x.bas" }
+            }
+        },
+        "number.percentage": {
+            "name": "constant.numeric.percentage.bas",
+            "match": "\\d*\\.*\\d*(%)",
+            "captures": {
+                "1": { "name": "punctuation.percentage.bas" }
+            }
+        },
+        "number.float": {
+            "name": "constant.numeric.float.bas",
+            "match": "\\d*(\\.)\\d*",
+            "captures": {
+                "1": { "name": "punctuation.float.point.bas" }
+            }
+        },
+        "number.time": {
+            "name": "constant.numeric.time.bas",
+            "match": "\\d*\\.*\\d*(s)",
+            "captures": {
+                "1": { "name": "punctuation.time.second.bas" }
+            }
+        },
+        "attributes.common": {
+            "name": "entity.name.attributes.common.bas",
+            "match": "x|y|zIndex|scale|duration"
+        },
+        "attributes.text.font": {
+            "name": "entity.name.attributes.text.font.bas",
+            "match": "alpha|color|fontSize|fontFamily|bold|textShadow|strokeWidth|strokeColor"
+        },
+        "attributes.text.other": {
+            "name": "entity.name.attributes.text.other.bas",
+            "match": "content|anchorX|anchorY|rotateX|rotateY|rotateZ|parent"
+        }
+    },
+    "scopeName": "source.bas"
+}
